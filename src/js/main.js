@@ -1,15 +1,13 @@
 /**
  * Created by grahamclapham on 16/10/15.
  */
-var Data = require('./data_ticker');
-
+var dataTicker = require('./data_ticker');
+var _testArr, _arrayGen, _array;
 var _init = function(){
-    console.log("THE INIT HAS BEEN CALLED....");
-
-    var _testArr = Data.arrayGenerator.createDataCell(11);
-
-    console.log("THE TESTA AARAY = ", _testArr);
+    var _testArr = dataTicker.arrayGenerator();
+    _arrayGen = dataTicker.arrayGenerator();
+    _array = _arrayGen._generateRandomNumberArray(10, 2000);
+    console.log(_array);
 };
-
 
 _init();

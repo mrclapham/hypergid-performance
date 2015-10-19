@@ -3,15 +3,69 @@
  */
 var staticData = require('./staticData');
 
-var data = staticData.data
+var data = staticData.data;
 var countryMap = staticData.countryMap;
 
 var _arrayLength = 60;
 var _returnArray = [];
 //--- API on Static data
 
-var arrayGenerator = {
-    createDataCell: function createDataCell(i){
+var _arrayGeneratorPrivate = {
+    _privateFunction: function _privateFunction(){
+        return "HELLO WORLD";
+    }
+
+}
+
+var arrayGeneratorProto = {
+        _array: null,
+    _generateEmptyArr:function _generateArr(){
+            if(!this._array || this._array.length != this.getArrayLength()) {
+                this._array = [];
+                for (var i = 0; i < this.getArrayLength(); i++) {
+                    this._array.push(null);
+                }
+                return this._array;
+            }
+        },
+        _arrayLength: 10,
+        setArrayLength: function setArrayLength(val){
+        if(isNaN(val)) return;
+            arrayGenerator.arrayLength = val
+        },
+        getArrayLength: function getArrayLength(){
+            return this._arrayLength;
+        },
+    _generateRandomNumberArray: function _generateRandomNumberArray(length, sampleLength){
+        if( isNaN(parseInt(length)) || isNaN(parseInt(sampleLength)) ) {
+            throw new Error("_generateRandomNumberArray requires a length shorter than the sampleLength.")
+        }
+
+        function addRandomNumber(arr){
+            var _arr = arr || [];
+            var _rand = Math.round( Math.random() * sampleLength );
+
+            if(arr.length < length ){
+                if(_arr.indexOf(_rand != -1)){
+                    _arr.push(_rand);
+                }
+                addRandomNumber(_arr);
+            }
+
+            return _arr
+        }
+        return addRandomNumber([]);
+    },
+    getRandomArray: function getRandomArray(){
+        if(this._arrayLength > data.NAME.length) throw new Error("Your Array length exceeds the data size.")
+        var _usedNumbers = [];
+
+        return this._generateEmptyArr(this.getArrayLength())
+            .map(function(d,i){
+                return this.createDataCell(i);
+            }.bind(this));
+    },
+    createDataCell:function createDataCell(i){
         return {
             NAME: data.NAME[i],
             TICKER: data.TICKER[i],
@@ -44,14 +98,17 @@ var arrayGenerator = {
             countryCode: countryMap[data.COUNTRY[i]]
         }
     },
-    createDataArray:function createDataArray() {
-        return createDataCell[10]
+    createDataArray:function createDataArray(val) {
+        if (isNaN(val)) return;
+        return [1,2,3,4,5];
     }
-}
+};
+
+var arrayGenerator = function () {
+    return Object.create(arrayGeneratorProto);
+};
 
 
-
-console.log('createDataCell ', arrayGenerator.createDataCell(0))
 
 
 var count = data.NAME.length;
