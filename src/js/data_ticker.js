@@ -6,16 +6,13 @@ var staticData = require('./staticData');
 var data = staticData.data;
 var countryMap = staticData.countryMap;
 
-var _arrayLength = 60;
-var _returnArray = [];
 //--- API on Static data
 
 var _arrayGeneratorPrivate = {
     _privateFunction: function _privateFunction(){
         return "HELLO WORLD";
     }
-
-}
+};
 
 var arrayGeneratorProto = {
         _array: null,
@@ -31,7 +28,7 @@ var arrayGeneratorProto = {
         _arrayLength: 10,
         setArrayLength: function setArrayLength(val){
         if(isNaN(val)) return;
-            arrayGenerator.arrayLength = val
+            this._arrayLength = val
         },
         getArrayLength: function getArrayLength(){
             return this._arrayLength;
@@ -44,25 +41,23 @@ var arrayGeneratorProto = {
         function addRandomNumber(arr){
             var _arr = arr || [];
             var _rand = Math.round( Math.random() * sampleLength );
-
             if(arr.length < length ){
                 if(_arr.indexOf(_rand != -1)){
                     _arr.push(_rand);
                 }
                 addRandomNumber(_arr);
             }
-
-            return _arr
+            return _arr;
         }
         return addRandomNumber([]);
     },
     getRandomArray: function getRandomArray(){
         if(this._arrayLength > data.NAME.length) throw new Error("Your Array length exceeds the data size.")
-        var _usedNumbers = [];
+        var _numbers = this._generateRandomNumberArray(this.getArrayLength(),  data.NAME.length)
 
         return this._generateEmptyArr(this.getArrayLength())
             .map(function(d,i){
-                return this.createDataCell(i);
+                return this.createDataCell(_numbers[i]);
             }.bind(this));
     },
     createDataCell:function createDataCell(i){
@@ -97,10 +92,6 @@ var arrayGeneratorProto = {
             flashColor: 'green',
             countryCode: countryMap[data.COUNTRY[i]]
         }
-    },
-    createDataArray:function createDataArray(val) {
-        if (isNaN(val)) return;
-        return [1,2,3,4,5];
     }
 };
 
@@ -108,6 +99,44 @@ var arrayGenerator = function () {
     return Object.create(arrayGeneratorProto);
 };
 
+//////
+var tickerTimerPrivate = {
+    _lastTick:null,
+    _timerFunction: function _timerFunction(){
+
+    },
+    onTick: function onTick(t){
+        var _frame = 16;
+        var second = _frame * 60
+        if(!this._lastTick) this._lastTick = t;
+        if(t- this._lastTick >second * 4){
+            this._lastTick = t;
+            //this.tickFunction();
+            console.log("TTTTTT")
+        }
+
+        window.requestAnimationFrame(tickerTimerPrivate.onTick.bind(this));
+    },
+    tickFunction: function tickFunction(){
+        console.log("TICKFUNCTION ")
+    }
+};
+
+var tickerTimerProto = {
+    start: function start(){
+        window.requestAnimationFrame(tickerTimerPrivate.onTick);
+    },
+    stop: function start(){
+
+    },
+
+
+};
+
+
+var timerGenerator = function () {
+    return Object.create(tickerTimerProto);
+};
 
 
 
@@ -247,7 +276,8 @@ var randomizeTick = function(stock) {
 module.exports = {
     arrayGenerator: arrayGenerator,
     stocks: stocks,
-    randomize: randomizeTicks
+    randomize: randomizeTicks,
+    timerGenerator: timerGenerator
 };
 
 

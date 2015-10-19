@@ -49,12 +49,15 @@ describe("arrayGenerator.createDataArray returns an Array with the correct prope
     var _array, _arrayGen;
     beforeEach(function(){
         _arrayGen = dataTicker.arrayGenerator();
-        _array = _arrayGen.createDataArray(10);
     });
     it("arrayGenerator.createDataArray returns an Array with the correct properties", function(){
         expect(_arrayGen).not.toBe(null);
         _arrayGen.setArrayLength(10);
         expect(_arrayGen.getArrayLength()).toEqual(10);
         expect(_arrayGen.getRandomArray().length).toEqual(10);
+
+        _arrayGen.setArrayLength(20);
+        expect(_arrayGen.getArrayLength()).toEqual(20);
+        expect(_arrayGen.getRandomArray().length).toEqual(20);
     })
 });

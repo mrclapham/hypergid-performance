@@ -6,8 +6,10 @@ var _testArr, _arrayGen, _array;
 var _init = function(){
     var _testArr = dataTicker.arrayGenerator();
     _arrayGen = dataTicker.arrayGenerator();
-    _array = _arrayGen._generateRandomNumberArray(10, 2000);
-    console.log(_array);
+    _array = _arrayGen.getRandomArray();
+    //console.log(JSON.stringify(_array));
+    var _timer = dataTicker.timerGenerator();
+    _timer.start();
 };
 
 _init();
