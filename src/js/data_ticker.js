@@ -23,8 +23,10 @@ var arrayGeneratorProto = {
                     this._array.push(null);
                 }
                 return this._array;
+            }else{
+                return this._array;
             }
-        },
+    },
         _arrayLength: 10,
         setArrayLength: function setArrayLength(val){
         if(isNaN(val)) return;
@@ -46,19 +48,21 @@ var arrayGeneratorProto = {
                     _arr.push(_rand);
                 }
                 addRandomNumber(_arr);
+            }else{
+                return _arr;
             }
             return _arr;
         }
         return addRandomNumber([]);
     },
     getRandomArray: function getRandomArray(){
+        var _this = this;
         if(this._arrayLength > data.NAME.length) throw new Error("Your Array length exceeds the data size.")
         var _numbers = this._generateRandomNumberArray(this.getArrayLength(),  data.NAME.length)
-
         return this._generateEmptyArr(this.getArrayLength())
             .map(function(d,i){
-                return this.createDataCell(_numbers[i]);
-            }.bind(this));
+                return _this.createDataCell(_numbers[i]);
+            });
     },
     createDataCell:function createDataCell(i){
         return {
@@ -102,29 +106,32 @@ var arrayGenerator = function () {
 //////
 var tickerTimerPrivate = {
     _lastTick:null,
-    _timerFunction: function _timerFunction(){
+    _functionCallsPerSecond:.5,
+    _arrayGen: arrayGenerator(),
 
-    },
     onTick: function onTick(t){
         var _frame = 16;
-        var second = _frame * 60
+        var second = _frame * 60;
         if(!this._lastTick) this._lastTick = t;
-        if(t- this._lastTick >second * 4){
+        if(t- this._lastTick > (second * tickerTimerPrivate._functionCallsPerSecond)){
             this._lastTick = t;
-            //this.tickFunction();
-            console.log("TTTTTT")
+            tickerTimerPrivate.tickFunction();
+            //console.log("AAAA", tickerTimerPrivate._arrayGen.getRandomArray())
         }
-
-        window.requestAnimationFrame(tickerTimerPrivate.onTick.bind(this));
+        window.requestAnimationFrame(tickerTimerPrivate.onTick);
     },
     tickFunction: function tickFunction(){
-        console.log("TICKFUNCTION ")
+        console.log("TICKFUNCTION ", this);
+        //console.log("AAAA", tickerTimerPrivate._arrayGen.getRandomArray());
     }
 };
 
 var tickerTimerProto = {
     start: function start(){
-        window.requestAnimationFrame(tickerTimerPrivate.onTick);
+        //window.requestAnimationFrame(tickerTimerPrivate.onTick);
+        var __int = window.setInterval(function(e){
+            console.log("AAAA", tickerTimerPrivate._arrayGen.getRandomArray()[0].NAME);
+        }, 2000)
     },
     stop: function start(){
 
@@ -137,7 +144,6 @@ var tickerTimerProto = {
 var timerGenerator = function () {
     return Object.create(tickerTimerProto);
 };
-
 
 
 var count = data.NAME.length;

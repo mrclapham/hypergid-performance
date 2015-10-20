@@ -61,3 +61,33 @@ describe("arrayGenerator.createDataArray returns an Array with the correct prope
         expect(_arrayGen.getRandomArray().length).toEqual(20);
     })
 });
+
+describe("_generateRandomNumberArray", function(){
+    var _numberArrayGen, _numArray;
+    beforeEach(function(){
+        _numberArrayGen = dataTicker.arrayGenerator();
+        _numArray = _numberArrayGen._generateRandomNumberArray(10,1000);
+    });
+    afterEach(function(){
+        _numberArrayGen = null;
+    });
+
+    it("_generateRandomNumberArray should generate a random Array of the correct length.",
+        function(){
+            expect(_numberArrayGen).toBe.ok;
+            expect(_numArray.length).toEqual(10);
+        }
+    );
+
+    it("_generateRandomNumberArray should generate a random Array of the correct length and be able to be called repeatedly",
+        function(){
+            var _numArray2 = _numberArrayGen._generateRandomNumberArray(20,1000);
+            expect(_numArray2.length).toEqual(20);
+            var _numArray3 = _numberArrayGen._generateRandomNumberArray(20,1000);
+            expect(_numArray3.length).toEqual(20);
+            var _numArray4 = _numberArrayGen._generateRandomNumberArray(40,4000);
+            expect(_numArray4.length).toEqual(40);
+        }
+    );
+});
+
